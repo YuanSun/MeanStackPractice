@@ -1,4 +1,4 @@
-require('./api/data/dbconnection.js').open('local');
+require('./api/data/mongoosedb.js');
 var express = require('express');
 var app = express();
 var path = require('path');

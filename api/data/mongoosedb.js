@@ -35,9 +35,12 @@ process.on('SIGTERM', function(){
     });
 });
 
-process.on('SIGUSR2', function(){
+process.once('SIGUSR2', function(){ //use once event to kill the process
     mongoose.connection.close(function(){
         console.log('Mongoose disconnected through app termination (SIGUSR2)');
         process.kill(process.pid, 'SIGUSR2');
     });
 });
+
+// BRING IN SCHEMAS AND MODELS
+require('./hotels.model.js');

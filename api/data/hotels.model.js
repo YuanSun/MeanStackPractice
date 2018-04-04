@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-
+var collection = 'meanhotel';
 var reviewSchema = new mongoose.Schema({ // cannot retrieve nested document
     name        : {
         type        : String, 
@@ -29,8 +29,6 @@ var roomSchema = new mongoose.Schema({
     price       : Number
 });
 
-var 
-
 var hotelSchema = new mongoose.Schema({
     name        : {
         type        : String,
@@ -57,4 +55,4 @@ var hotelSchema = new mongoose.Schema({
     }
 });
 
-mongoose.model('Hotel', hotelSchema);
+mongoose.model('Hotel', hotelSchema, collection); // need to add collection name

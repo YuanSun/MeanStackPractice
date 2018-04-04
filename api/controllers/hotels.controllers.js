@@ -36,27 +36,38 @@ module.exports.hotelsGetAll = function(req, res) {
             res.json(err);
         } else {
             console.log('Found hotels', hotels.length);
-            res.json(hotels);
+            res.status(200).json(hotels);
         }
-        
     });
 }
 
 module.exports.hotelsGetOne = function(req, res) {
-    var db = dbconn.get();
-    var collection = db.db().collection(collectionName);
+    // Native driver
+    // var db = dbconn.get();
+    // var collection = db.db().collection(collectionName);
 
     var hotelId = req.params.hotelId;
     var thisHotel = hotelData[hotelId];
     console.log('GET hotelId ', hotelId);
     
-    collection
-    .findOne({
-        _id: ObjectId(hotelId)
-    }, function(err, doc) {
-        res
-        .status(200)
-        .json(doc);
+    // Native driver
+    // collection
+    // .findOne({
+    //     _id: ObjectId(hotelId)
+    // }, function(err, doc) {
+    //     res
+    //     .status(200)
+    //     .json(doc);
+    // });
+
+    Hotel.findById(hotelId).exec(function(err, hotels) {
+        if(err) {
+            console.log(err);
+            res.json(err);
+        } else {
+            console.log('Found hotels', hotels.length);
+            res.status(200).json(hotels);
+        }
     });
     
 }

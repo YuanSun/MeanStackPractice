@@ -173,3 +173,64 @@ module.exports.hotelsAddOne = function(req, res) {
             }
         });
 }
+
+module.exports.hotelsUpdateOne = function(req, res) {
+    var hotelId = req.params.hotelId;
+    var thisHotel = hotelData[hotelId];
+    console.log('GET hotelId ', hotelId);
+    
+    Hotel
+    .findById(hotelId)
+    .select('-reviews -rooms')  // exclude reviews, rooms
+    .exec(function(err, hotel) {
+        // Step 1: find the hotel
+        var response = {
+            status: 200,
+            message: hotel
+        };
+        if(err) {
+            console.log(err);
+            response.status = 500;
+            response.message = err;
+        } else if(!hotel) {
+            response.status = 404;
+            response.message = {
+                "message" : "Hotel ID not found"
+            };
+        } 
+        if(response.status !== 200) {
+            res
+            .status(response.status)
+            .json(response.message);
+        } else {
+            // Step 2: update the hotel
+            hotel.name = req.body.name;
+            hotel.description = req.body.description;
+            hotel.stats = parseInt(req.body.stars,10);
+            hotel.services = _splitArray(req.body.services);
+            hotel.photos = _splitArray(req.body.photos);
+            hotel.currency = req.body.currency;
+            hotel.location = {
+                address: req.body.address,
+                coordinates : [
+                    parseFloat(req.body.lng),
+                    parseFloat(req.body.lat)
+                ]
+            };
+
+            //Step 3: Save back to db
+            hotel.save(function (err, hotelUpdated) {
+                if(err) {
+                    res
+                        .status(500)
+                        .json(err);
+                } else {
+                    // Step 4: generate the response
+                    res
+                        .status(204) //The server successfully processed the request and is not returning any content
+                        .json();
+                }
+            });
+        }
+    });
+}

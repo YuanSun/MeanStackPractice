@@ -15,6 +15,7 @@ app.use(function(req, res, next){
 
 // static set for the homepage 
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/node_modules', express.static(__dirname + '/node_modules'));
 
 app.use(bodyParser.urlencoded({extended: false}));
 app.use('/api', routes);

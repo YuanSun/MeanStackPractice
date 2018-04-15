@@ -1,5 +1,8 @@
 angular.module('meanhotel',['ngRoute'])
-    .config(config);
+    .config(config)
+    .config(['$locationProvider', function($locationProvider) {
+        $locationProvider.hashPrefix(''); // deal with #! 
+      }]);
 
 function config($routeProvider) {
     $routeProvider
